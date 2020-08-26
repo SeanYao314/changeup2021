@@ -26,14 +26,10 @@ void opcontrol() {
 		//intake
 		intake_control();
 
-		//lever stuff
-		lever_control();
+		//roller
+		roller_control();
 
-		// lift from korvex
-		arm_control();
-		
-		arm_control2();
-		
+
 		recording::record();
 		pros::delay(ITERATION_INTERVAL);
 		

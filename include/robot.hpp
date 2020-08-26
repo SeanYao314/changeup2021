@@ -9,28 +9,26 @@
 
 //sensors
 
-
 //chassis motor ports
-const int CHASSIS_LEFT_FRONT  = 19;
-const int CHASSIS_LEFT_REAR   = 20;
-const int CHASIIS_RIGHT_FRONT = 12;
-const int CHASSIS_RIGHT_REAR  = 11;
+const int CHASSIS_LEFT_FRONT  = 3;
+const int CHASSIS_LEFT_REAR   = 10;
+const int CHASIIS_RIGHT_FRONT = 2;
+const int CHASSIS_RIGHT_REAR  = 21;
 
 //inkate motor ports
-const int INTAKE_MOTOR_LEFT   = 17;
-const int INTAKE_MOTOR_RIGHT  = 14;
+const int INTAKE_MOTOR_LEFT   = 4;
+const int INTAKE_MOTOR_RIGHT  = 1;
 
 //lever motor 
-const int LEVER_MOTOR = 16;
+const int FRONT_INTAKE = 12;
 
 //arm motor
-const int ARM_MOTOR = 18;
+const int TOP_INTAKE = 20;
 
-//arm varibles
-const int ARM_PRESETS[5]  = {80, -1732, -1868, -2090, -2410};
-const int ARM_PRESETS_LEN = 5;
 
 const int GYRO_PORT = 8;
+
+const char LINE_TRACKER = 'H';
 
 //chassis
 // extern okapi::Motor chassis_left_front;
@@ -39,8 +37,8 @@ const int GYRO_PORT = 8;
 // extern okapi::Motor chassis_right_rear;
 extern okapi::Motor intake_motor_left;
 extern okapi::Motor intake_motor_right;
-extern okapi::Motor lever_motor;
-extern okapi::Motor arm_motor;
+extern okapi::Motor front_intake;
+extern okapi::Motor top_intake;
 extern pros::Controller master;
 extern std::shared_ptr<okapi::OdomChassisController> chassis;
 
@@ -56,11 +54,9 @@ void intake_drive(float left_intake_speed, float right_intake_speed);
 void arm_drive(int pos);
 
 void intake_control();
+void intake_roller_drive(float speed, float speed2);
+void roller_control();
 
-void lever_drive(float lever_speed);
-void lever_control();
-void arm_control();
-void arm_control2();
 void auton_simulator();
 void gyroTest();
 

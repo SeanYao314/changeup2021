@@ -10,12 +10,13 @@ using namespace okapi;
 
 okapi::Motor intake_motor_left(INTAKE_MOTOR_LEFT);
 okapi::Motor intake_motor_right(INTAKE_MOTOR_RIGHT);
-okapi::Motor lever_motor(LEVER_MOTOR);
-okapi::Motor arm_motor(ARM_MOTOR);
+okapi::Motor front_intake(FRONT_INTAKE);
+okapi::Motor top_intake(TOP_INTAKE);
 pros::Controller master (E_CONTROLLER_MASTER);
 
 pros::Imu imu(1);
 pros::ADIGyro gyro (GYRO_PORT);
+// pros::ADIAnalogIn linetracker (LINE_TRACKER);
 
 /* choose only one of the following: either separated chassis motors, or the chassis controller */
 //chassis motors
@@ -48,7 +49,7 @@ const auto CHASSIS_WIDTH = 9.3_in;
 // );
 
 std::shared_ptr<okapi::OdomChassisController> chassis = ChassisControllerBuilder()
-		.withMotors( {-CHASSIS_LEFT_FRONT, -CHASSIS_LEFT_REAR}, {CHASIIS_RIGHT_FRONT, CHASSIS_RIGHT_REAR})
+		.withMotors( {-CHASSIS_LEFT_FRONT, CHASSIS_LEFT_REAR}, {CHASIIS_RIGHT_FRONT, -CHASSIS_RIGHT_REAR})
 		.withGains(
 			{0.001, 0.0004, 0.00001}, // Distance controller gains
 			{0.0001, 0.0001, 0.000}, // Turn controller gains
@@ -78,8 +79,8 @@ vector<AbstractMotor*>& get_motor_group() {
 
 		motor_group.push_back(&intake_motor_left);
 		motor_group.push_back(&intake_motor_right);
-		motor_group.push_back(&lever_motor);
-		motor_group.push_back(&arm_motor);
+		motor_group.push_back(&front_intake);
+		motor_group.push_back(&top_intake);
 	}
 
 	return motor_group;
