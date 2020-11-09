@@ -26,7 +26,7 @@ pros::ADIGyro gyro (GYRO_PORT);
 // okapi::Motor chassis_left_front(CHASSIS_LEFT_FRONT);
 
 const auto WHEEL_DIAMETER = 4.5_in;
-const auto CHASSIS_WIDTH = 9.3_in;
+const auto CHASSIS_WIDTH = 16_in;
 
 // chassis controller
 // okapi::ChassisControllerIntegrated chassis = ChassisControllerFactory::create(

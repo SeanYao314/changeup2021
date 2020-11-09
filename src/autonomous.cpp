@@ -152,11 +152,57 @@ void imuNoSleuth(double degrees, double speed) {
 
     }
 }
+void intakeRun(int topspeed, int bottomspeed, int rollerspeed) {
+    intake_drive(-rollerspeed, -rollerspeed);
+    intake_roller_drive(bottomspeed, -topspeed);
+}
+void intakeStop() {
+    intakeRun(0,0,0);
+}
 
 /* ---------------------------------- START OF AUTONS ---------------------------------- */
-/* ------------RED 5 CUBES--------------- */
-void red_unprotect() {
-  
+/* ------------RED 1--------------- */
+void test_auton() {
+    intakeRun(200, 200, 200);
+    pros::delay(190);
+    intakeRun(0, 0, 0);
+    chassis->setMaxVelocity(1);
+    chassis->moveDistance(1_in);
+    chassis->turnAngle(1_deg);
+    moveForwardPower(20,200);
+}
+void red_1() {
+    intakeRun(200, 0, 0);
+    pros::delay(290);
+    intakeStop();
+    chassis->setMaxVelocity(86);
+    chassis->moveDistance(32_in);
+    chassis->setMaxVelocity(326);
+    chassis->turnAngle(-226_deg);
+
+    intakeRun(9, 50, 200);
+    moveForwardPower(20, 0.5);
+    pros::delay(300);
+
+    moveForwardPower(4, 0.8);
+    moveForwardPower(8,0.5);
+    intakeRun(-70,-70,-70);
+    pros::delay(300);
+    intakeRun(200, 200, 200);
+    pros::delay(1650);
+    intakeRun(200, 200, -20);
+    pros::delay(200);
+    intakeRun(-100,200,-20);
+    chassis->setMaxVelocity(126);
+    chassis->moveDistance(-5_in);
+    intakeStop();
+    chassis->setMaxVelocity(700);
+    chassis->turnAngle(-30_deg);
+    moveForwardPower(4,0.5);
+    moveForwardPower(20, -0.5);
+    intakeRun(-200, 200, -200);
+    pros::delay(750);
+
 }
 /* ------------BLUE 5 CUBE--------------- */
 void blue_unprotect() {
@@ -180,7 +226,7 @@ void autonomous() {
       
         return;
     } else if (program == "Alpha") {
-       
+       red_1();
         return;
     } else if (program == "Beta") {
       
@@ -189,7 +235,7 @@ void autonomous() {
     } else if (program == "Lima") {
        
     } else {
-     
+        red_1();
         cout << "yaw = " << imu.get_yaw() << ", cPos = " << imu.get_rotation() << ", k = " << sin(imu.get_rotation()) << endl;
     }
 

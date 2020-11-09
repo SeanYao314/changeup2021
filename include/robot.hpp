@@ -10,17 +10,17 @@
 //sensors
 
 //chassis motor ports
-const int CHASSIS_LEFT_FRONT  = 3;
-const int CHASSIS_LEFT_REAR   = 10;
+const int CHASSIS_LEFT_FRONT  = 8;
+const int CHASSIS_LEFT_REAR   = 7;
 const int CHASIIS_RIGHT_FRONT = 2;
-const int CHASSIS_RIGHT_REAR  = 21;
+const int CHASSIS_RIGHT_REAR  = 10;
 
 //inkate motor ports
-const int INTAKE_MOTOR_LEFT   = 4;
+const int INTAKE_MOTOR_LEFT   = 9;
 const int INTAKE_MOTOR_RIGHT  = 1;
 
 //lever motor 
-const int FRONT_INTAKE = 12;
+const int FRONT_INTAKE = 6;
 
 //arm motor
 const int TOP_INTAKE = 20;
