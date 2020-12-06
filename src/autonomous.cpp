@@ -72,7 +72,7 @@ void turningP(int targetTurn, int voltageMax=127, bool debugLog=false) {
 		std::cout << pros::millis() << "error " << errorCurrent << std::endl;
 		std::cout << pros::millis() << "voltage " << voltage << std::endl;
         	std::cout << pros::millis() << "theta " << imu.get_rotation() << std::endl;
-
+        
 		// for csv output, graphing the function
 		// if (debugLog) std::cout << pros::millis() << "," << error << "," << voltage << std::endl;
 
@@ -178,34 +178,77 @@ void red_1() {
     chassis->setMaxVelocity(86);
     chassis->moveDistance(32_in);
     chassis->setMaxVelocity(326);
-    chassis->turnAngle(-226_deg);
+    chassis->turnAngle(-229.5_deg);
 
-    intakeRun(9, 50, 200);
-    moveForwardPower(20, 0.5);
+    intakeRun(11, 50, 200);
+    moveForwardPower(21, 0.5);
     pros::delay(300);
 
-    moveForwardPower(4, 0.8);
-    moveForwardPower(8,0.5);
+
+    moveForwardPower(6, 0.8);
+    moveForwardPower(9,0.5);
     intakeRun(-70,-70,-70);
     pros::delay(300);
     intakeRun(200, 200, 200);
-    pros::delay(1650);
-    intakeRun(200, 200, -20);
-    pros::delay(200);
+    pros::delay(1100);
+    moveForwardPower(2,-0.7);
+    pros::delay(450);
+    moveForwardPower(2, 0.7);
+
+    intakeRun(200, 200, -40);
+    pros::delay(600);
     intakeRun(-100,200,-20);
+    pros::delay(350);
     chassis->setMaxVelocity(126);
     chassis->moveDistance(-5_in);
     intakeStop();
-    chassis->setMaxVelocity(700);
-    chassis->turnAngle(-30_deg);
-    moveForwardPower(4,0.5);
+    chassis->setMaxVelocity(1100);
+    chassis->turnAngle(-60_deg);
+    moveForwardPower(7,0.7);
     moveForwardPower(20, -0.5);
-    intakeRun(-200, 200, -200);
+    intakeRun(-200, -200, -200);
     pros::delay(750);
 
 }
 /* ------------BLUE 5 CUBE--------------- */
-void blue_unprotect() {
+void blue_1() {
+    intakeRun(200, 0, 0);
+    pros::delay(290);
+    intakeStop();
+    chassis->setMaxVelocity(86);
+    chassis->moveDistance(32_in);
+    chassis->setMaxVelocity(326);
+    chassis->turnAngle(217.5_deg);
+
+    intakeRun(11, 50, 200);
+    moveForwardPower(21, 0.5);
+    pros::delay(300);
+
+
+    moveForwardPower(6, 0.8);
+    moveForwardPower(9,0.5);
+    intakeRun(-70,-70,-70);
+    pros::delay(300);
+    intakeRun(200, 200, 200);
+    pros::delay(1100);
+    moveForwardPower(2,-0.7);
+    pros::delay(450);
+    moveForwardPower(2, 0.7);
+
+    intakeRun(200, 200, -40);
+    pros::delay(600);
+    intakeRun(-100,200,-20);
+    pros::delay(350);
+    chassis->setMaxVelocity(126);
+    chassis->moveDistance(-5_in);
+    intakeStop();
+    chassis->setMaxVelocity(1100);
+    chassis->turnAngle(50_deg);
+    moveForwardPower(7,0.7);
+    moveForwardPower(20, -0.5);
+    intakeRun(-200, -200, -200);
+    pros::delay(750);
+
  }
 /* ------------BLUE 3 CUBE--------------- */
 void blue_protect() {
@@ -231,7 +274,7 @@ void autonomous() {
     } else if (program == "Beta") {
       
     } else if (program == "Kilo") {
-       
+       blue_1();
     } else if (program == "Lima") {
        
     } else {

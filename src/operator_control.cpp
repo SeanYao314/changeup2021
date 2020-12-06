@@ -5,7 +5,13 @@
 
 using namespace okapi;
 using namespace pros;
-
+void moveForwardPower1(int cycles, double power) {
+    for (int i=0; i<cycles; ++i) {
+        chassis->getModel()->tank(power, power);
+        pros::delay(50);
+    }
+    chassis->stop();
+}
 
 void gyroTest() {
 	if(master.get_analog(E_CONTROLLER_ANALOG_LEFT_X) > 0) {
@@ -48,45 +54,63 @@ void intake_control() {
 	}
 }
 
-int ball_check = 2170;
+int ball_check = 2470; //higher means sometimes it could autostop when not supposed to
 int ball_threshold = 200;
 int ball_status = 0;
 int test1 = 0;
 pros::ADIAnalogIn linetracker ('H');
+pros::ADIAnalogIn linetracker2 ('A');
 void roller_control() {
 	int ball_detect = linetracker.get_value();
+	int ball_detect2 =linetracker2.get_value();
 	if (master.get_digital(E_CONTROLLER_DIGITAL_L1) && ball_detect > ball_check) {
-		intake_roller_drive(200, -180);
+		intake_roller_drive(200, -120);
 		intake_drive(-200, -200);
 		pros::delay(40);
 		top_intake.setBrakeMode(AbstractMotor::brakeMode::coast);
-	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L1) && ball_detect <= ball_check) {
-		intake_roller_drive(300, -0);
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L1) && ball_detect < ball_check && ball_detect2 >= ball_check) {
+		intake_roller_drive(200, 0);
+		intake_drive(-200, -200);
+		top_intake.setBrakeMode(AbstractMotor::brakeMode::hold);
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L1) && ball_detect < ball_check && ball_detect2 <= ball_check) {
+		intake_roller_drive(0, 0);
 		intake_drive(-200, -200);
 		top_intake.setBrakeMode(AbstractMotor::brakeMode::hold);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_R1)) {
 		top_intake.setBrakeMode(AbstractMotor::brakeMode::coast);
 		intake_roller_drive(200, -200);
-		intake_drive(20, 20);
+		intake_drive(75, 75);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_UP)) {
 		intake_roller_drive(80, -100);
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
+		intake_roller_drive(85, 0);
+		intake_drive(-200,-200);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_DOWN)) {
 		intake_roller_drive(30, 130);
 		intake_drive(-80,80);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_R2)) {
 		intake_roller_drive(200, 200);
-		intake_drive(-100, -100);
+		intake_drive(-200, -200);
 		top_intake.setBrakeMode(AbstractMotor::brakeMode::coast);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_B)) {
 		intake_roller_drive(-200, 200);
 		intake_drive(100, 100);
+
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_Y)) {
+		intake_drive(-200,-200);
+		moveForwardPower1(4,0.45);
+		moveForwardPower1(2, 0.2);
+		pros::delay(500);
 		top_intake.setBrakeMode(AbstractMotor::brakeMode::coast);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_RIGHT)) {
-		//test 
-		top_intake.moveRelative(-4750,-200);
-		pros::delay(120);
-		top_intake.moveRelative(0,-200);
-		pros::delay(200);
+		top_intake.setBrakeMode(AbstractMotor::brakeMode::coast);
+		intake_roller_drive(200, -200);
+		intake_drive(-200,-200);
+		moveForwardPower1(2,-0.4);
+		pros::delay(330);
+		intake_drive(-30,-30);
+		moveForwardPower1(2,0.4);
+		pros::delay(330);
 
 	} else {
 		intake_roller_drive(0, 0);
