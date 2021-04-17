@@ -54,7 +54,7 @@ void intake_control() {
 	}
 }
 
-int ball_check = 2470; //higher means sometimes it could autostop when not supposed to
+int ball_check = 2470; //higher =easier detection but could false stop
 int ball_threshold = 200;
 int ball_status = 0;
 int test1 = 0;
@@ -80,6 +80,7 @@ void roller_control() {
 		top_intake.setBrakeMode(AbstractMotor::brakeMode::coast);
 		intake_roller_drive(200, -200);
 		intake_drive(75, 75);
+		chassis_tank_drive(45,45);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_UP)) {
 		intake_roller_drive(80, -100);
 	} else if(master.get_digital(E_CONTROLLER_DIGITAL_L2)) {
@@ -111,6 +112,9 @@ void roller_control() {
 		intake_drive(-30,-30);
 		moveForwardPower1(2,0.4);
 		pros::delay(330);
+
+	} else if(master.get_digital(E_CONTROLLER_DIGITAL_A)) {
+		autonomous();
 
 	} else {
 		intake_roller_drive(0, 0);

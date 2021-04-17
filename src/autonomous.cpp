@@ -6,9 +6,19 @@ using namespace okapi;
 using namespace std;
 using namespace recording;
 
+pros::Imu imu_sensor(3);
 void skill_auton();
+void delay(int x) {
+    pros::delay(x);
+}
+void toplock() {
+    top_intake.setBrakeMode(AbstractMotor::brakeMode::hold);
+}
+void topunlock() {
+	top_intake.setBrakeMode(AbstractMotor::brakeMode::coast);
+}
 void turningP(int targetTurn, int voltageMax=127, bool debugLog=false) {
-	float kp = 1.6;
+	float kp = 2.4;
 	float ki = 0.8;
 	float kd = 0.45;
 
@@ -29,7 +39,7 @@ void turningP(int targetTurn, int voltageMax=127, bool debugLog=false) {
 	int startTime = pros::millis();
 
 	while(autonomous) {
-		error = targetTurn - imu.get_rotation();
+		error = targetTurn - imu.get_heading();
 		errorCurrent = abs(error);
 		errorCurrentInt = errorCurrent;
 		sign = targetTurn / abs(targetTurn); // -1 or 1
@@ -82,10 +92,22 @@ void turningP(int targetTurn, int voltageMax=127, bool debugLog=false) {
 		pros::delay(10);
 	}
 }
+void turnIMU(double targetAngle, double initialSpeed) {
+    int sign;
+    double error;
+    error = targetAngle - imu.get_heading();
+    sign = targetAngle/abs(targetAngle);
+    while(autonomous && abs(error) < 5) {
+        chassis->getModel()->tank(error/2*sign, -error/2*sign);
+    }
+    chassis->stop();
+}
+
 
 void gyroTurning(int degrees, double chassis_power) {
+    imu.reset();
     const double pi = 3.14159265358979323846;
-    double current_pos = gyro.get_value() / 10.0;
+    double current_pos = imu.get_heading() / 10.0;
     double target_pos = current_pos + degrees;
 
     double delta = sin((target_pos - current_pos) / 180 * pi);
@@ -99,7 +121,7 @@ void gyroTurning(int degrees, double chassis_power) {
         } else {
             chassis->getModel()->tank(-chassis_power, chassis_power);
         }
-        current_pos = gyro.get_value() / 10;
+        current_pos = imu.get_heading() / 10;
         current_delta = abs(sin((target_pos - current_pos) / 180 * pi));
 
         cout << "target pos = " << target_pos << ", current pos = " << current_pos << ", delta = " << delta << endl;
@@ -196,7 +218,7 @@ void red_1() {
     moveForwardPower(2, 0.7);
 
     intakeRun(200, 200, -40);
-    pros::delay(600);
+    pros::delay(350);
     intakeRun(-100,200,-20);
     pros::delay(350);
     chassis->setMaxVelocity(126);
@@ -210,7 +232,7 @@ void red_1() {
     pros::delay(750);
 
 }
-/* ------------BLUE 5 CUBE--------------- */
+/* ------------BLUE 1--------------- */
 void blue_1() {
     intakeRun(200, 0, 0);
     pros::delay(290);
@@ -236,7 +258,7 @@ void blue_1() {
     moveForwardPower(2, 0.7);
 
     intakeRun(200, 200, -40);
-    pros::delay(600);
+    pros::delay(350);
     intakeRun(-100,200,-20);
     pros::delay(350);
     chassis->setMaxVelocity(126);
@@ -250,9 +272,137 @@ void blue_1() {
     pros::delay(750);
 
  }
-/* ------------BLUE 3 CUBE--------------- */
-void blue_protect() {
+ void red_2() {
+    // intakeRun(200, 0, 0);
+    // pros::delay(60);
+    // intakeStop();
+    // chassis->setMaxVelocity(186);
+    // chassis->moveDistance(25_in);
+    // chassis->setMaxVelocity(1226);
+    // chassis->turnAngle(-225.5_deg);
+
+    // intakeRun(0, 200, 200);
+    // moveForwardPower(7.5, 0.9);
+    // pros::delay(300);
+    intakeRun(200,0,0);
+    pros::delay(100);
+    intakeStop();
+    intakeRun(0,200,200);
+    chassis->setMaxVelocity(150);
+    chassis->moveDistance(10_in);
+
+    chassis_tank_drive(120,90);
+    pros::delay(120);
+    chassis_tank_drive(0,0);
+
+    chassis->setMaxVelocity(1226);
+    chassis->turnAngle(-113_deg);
+
+    moveForwardPower(7,0.6);
+    pros::delay(400);
+
+    chassis_tank_drive(-8,-8);
+    moveForwardPower(2,-0.55);
+    intakeRun(200, 140, 200);
+    pros::delay(970);
+    chassis_tank_drive(0,0);
+
+    intakeRun(200, 200, -40);
+    pros::delay(950);
+    intakeRun(-100,200,-20);
+    pros::delay(350);
+    chassis->setMaxVelocity(126);
+
+    moveForwardPower(13, -0.5);
+    intakeRun(-200, -100, -200);
+    chassis->setMaxVelocity(900);
+    chassis->turnAngle(-254.5_deg);
+    intakeRun(200,200,-120);
+    chassis->setMaxVelocity(170);
+    chassis->moveDistance(48.2_in);
+    chassis->setMaxVelocity(1200);
+    chassis->turnAngle(154_deg);
+    intakeRun(200,200,200);
+    moveForwardPower(13,0.4);
+    pros::delay(300);
+
+    pros::delay(2050);
+    moveForwardPower(5,-0.6);
+ }
+ void skills() {
+    intakeRun(200,0,0);
+    delay(100);
+    intakeRun(-200,0,0);
+    delay(200);
+    intakeStop();
+    toplock();
+
+    intakeRun(0,200,200);
+    moveForwardPower(2,0.6);
+    moveForwardPower(10, 0.3);
+    moveForwardPower(9 ,0.56);
+    chassis->setMaxVelocity(1200);
+    delay(200);
+    chassis->turnAngle(-232_deg);
+
+    topunlock();
+
+    intakeStop();
+    moveForwardPower(22.5, 0.5);
+    delay(300);
+
+    moveForwardPower(3, 0.5);
+    delay(100);
+    moveForwardPower(1,-0.3);
+
+    delay(200);
+
+    intakeRun(200,200,200);
+    delay(320);
+
+    intakeRun(-20,200,-200);
+    moveForwardPower(8.5,-0.4);
+
+    delay(200);
+    intakeStop();    
+
+    chassis->turnAngle(231_deg);
+
+    delay(100);
+    moveForwardPower(15, -0.4);
+    moveForwardPower(4.5, -0.2);
+
+
+    delay(400);
+    moveForwardPower(9, 0.6);
+    chassis->setMaxVelocity(140);
+    chassis->moveDistance(38_in);
+
+    intakeRun(0,200,200);
+
+    moveForwardPower(14.5, 0.4);
+    delay(700);
+    intakeStop();
+
+    chassis->setMaxVelocity(1200);
+    chassis->turnAngle(-154_deg);
+    delay(200);
+
+    moveForwardPower(7, 0.5);
+    intakeRun(-200,200,200);
+    delay(120);
+    intakeRun(200,200,200);
+
+    delay(400);
+    intakeStop();
+
+ }
+/* ------------BLUE 2--------------- */
+void blue_2() {
  
+}
+void test_auton2() {
+    turningP(-10);
 }
 /* -------FOUR CUBE UNPROTECTED----- */
 void four_cube_red() {
@@ -266,19 +416,19 @@ void autonomous() {
 
     auto program = screen::get_selected_program();
     if (program == "Joker") {
-      
+        skills();
         return;
     } else if (program == "Alpha") {
-       red_1();
-        return;
-    } else if (program == "Beta") {
-      
-    } else if (program == "Kilo") {
-       blue_1();
-    } else if (program == "Lima") {
-       
-    } else {
         red_1();
+        return;
+    } else if (program == "Bravo") {
+        red_2();
+    } else if (program == "Kilo") {
+        blue_1();
+    } else if (program == "Lima") {
+       blue_2();
+    } else {
+        skills();
         cout << "yaw = " << imu.get_yaw() << ", cPos = " << imu.get_rotation() << ", k = " << sin(imu.get_rotation()) << endl;
     }
 
